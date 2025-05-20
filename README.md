@@ -64,4 +64,5 @@ stream = audio.open(format=FORMAT,
 [ ] Tidy the device output of `pyaudio_device_list.py`
 [ ] Simplify window closing
 [ ] Spectrogram Reset command 
+[ ] tidy run_spectrogram.py
 
