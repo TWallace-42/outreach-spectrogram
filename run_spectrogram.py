@@ -48,7 +48,7 @@ global keep_going
 keep_going = True
 
 
-spectrogram_size = (150,150) #f_steps, time steps
+spectrogram_size = (300,450) #f_steps, time steps
 spec_array = np.zeros(spectrogram_size)
 
 f = 3
@@ -108,6 +108,11 @@ def get_dfft(audio_input):
 	freq_slice = np.where((f>= fmin) & (f <= fmax))
 	f = f[freq_slice]
 	
+	#code for testing frequency is as expected
+	#test_f = 440
+	#diff_f = np.abs(f - test_f)
+	
+	#Sxx[np.where(diff_f == np.min(diff_f))] = np.max(Sxx)
 	if len(Sxx.shape) > 3:
 		Sxx = Sxx[freq_slice,-1][:,0]
 		
