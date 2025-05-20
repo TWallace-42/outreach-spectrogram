@@ -11,6 +11,7 @@ except Exception as e:
 
 p = pyaudio.PyAudio()
 info = p.get_host_api_info_by_index(0)
+
 numdevices = info.get('deviceCount')
 
 for i in range(0, numdevices):
@@ -21,7 +22,7 @@ FORMAT = pyaudio.paInt16 # We use 16bit format per sample
 CHANNELS = 1
 RATE = 16000
 CHUNK = 512 # 1024bytes of data red from a buffer
-RECORD_SECONDS = 0.1
+RECORD_SECONDS = 0.05
 WAVE_OUTPUT_FILENAME = "file.wav"
 
 print("------------DEVICES------------")
@@ -61,7 +62,10 @@ def plot_data(in_data,i,spec_array):
 	spec_array = spec_array[:,1:]
 	
 	spec_show = spec_array/np.max(spec_array)
-	spec_show -= np.min(spec_show)
+	try:
+		spec_show -= np.min(spec_show)
+	except:
+		pass
 	spec_show = cv2.resize(spec_show,None,fx = f,fy = f)[::-1,:]
 
 	spec_show = cv2.applyColorMap((255*spec_show).astype(np.uint8),cv2.COLORMAP_VIRIDIS)
@@ -86,9 +90,10 @@ dfft_data = [None]
 
 def read_audio(input_stream):
 	audio_data[0] = np.fromstring(input_stream, np.int16)
+	
 
 def get_dfft(audio_input):
-	dfft_data[0] = np.log10(np.abs(np.fft.rfft(audio_input,n = spectrogram_size[0]*4)))
+	dfft_data[0] = np.log10(np.abs(np.fft.rfft(audio_input,n = spectrogram_size[0]*4)))#np.log10(
 	dfft_data[0] = np.resize(dfft_data[0],(spectrogram_size[0],1))
 
 
@@ -145,11 +150,21 @@ while keep_going:
 			injection_strength = 1
 		
 		spec_array = spec_array[:,1:]
-
-		spec_show = spec_array/np.max(spec_array)
+		
+		spec_array = np.nan_to_num(spec_array,nan = 0.0)
+		#spec_array = np.log10(spec_array)
+		if np.max(spec_array) !=0:
+			spec_array -= np.min(spec_array)
+			spec_show = spec_array/np.max(spec_array)
+			#print(np.max(spec_array))
+		else:
+			spec_show = spec_array.copy()
+			print("Bad Signal")
+		
 		spec_show -= np.min(spec_show)
+		#print("here")
 		spec_show = cv2.resize(spec_show,None,fx = f,fy = f)[::-1,:]
-
+		#print(np.min(spec_show),np.max(spec_show))
 		spec_show = cv2.applyColorMap((255*spec_show).astype(np.uint8),cv2.COLORMAP_VIRIDIS)
 
 		cv2.imshow("spectrogram",spec_show)
@@ -157,6 +172,7 @@ while keep_going:
 		#if the graph is stop-start then increase this
 		cv2.waitKey(5)
 		if user_input[0] is not None:
+			
 			try:
 				inject_data = np.loadtxt("injections/" + user_input[0] + ".txt")
 				injection_strength = user_input_strength[0]
