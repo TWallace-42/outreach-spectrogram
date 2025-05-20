@@ -13,6 +13,18 @@ be nice if we could show injections.
 Below I will detail each individual file, how it's run, and then at the bottom a large TODO list
 
 # run_spectrogram.py
+This should run relatively simply as `python run_spectrogram.py`. To input injections you simply type the name of the injection file
+(without .txt or injection/) and it will find the file in the directory and input it into the live feed.
+
+
+## How to close
+Like all the best programs this isn't easy to close. Basically just hit Ctrl + C in the terminal window and that will close the stream and window
+
+## Common Issues
+If you are seeing a totally black (or white) output there's a chance you aren't using the correct device index. 
+By running `pyaudio_device_list.py` you should get a list of devices for troubleshooting.
+
+
 
 # injection_maker.py
 This turns standard png/jpg/jpeg images into txt arrays that can be injected into the spectrogram.
@@ -38,10 +50,11 @@ stream = audio.open(format=FORMAT,
                     channels=CHANNELS,
                     rate=RATE,
                     input=True,
-                    input_device_index=<HERE>)```
+                    input_device_index=<HERE>)
+```
 
 # TODO
-[ ] Finish README.md
+[x] Finish README.md
 [x] Tidy injection_maker.py
 [x] Make injection_maker.py run in command line
 [ ] Injection Sound File maker
@@ -49,5 +62,6 @@ stream = audio.open(format=FORMAT,
 [ ] Calculate FFT frequencies to display
 [ ] log colormap
 [ ] Tidy the device output of `pyaudio_device_list.py`
-
+[ ] Simplify window closing
+[ ] Spectrogram Reset command 
 
