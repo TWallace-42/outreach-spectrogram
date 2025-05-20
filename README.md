@@ -23,10 +23,22 @@ to run in the command line you can try:
 python injection_maker.py <file_name>.png/.jpg/.jpeg 
 ```
 
-There are various options but the main one is the flag `-i` which will invert the grayscale image.
+There are various options but the main one is the flag `-i` which will invert the grayscale image. At the moment
+we can only do .png, .jpg, and .jpeg but this is mostly just laziness on my end.
 
 # pyaudio_device_list.py
+Lists devices found by pyaudio. Useful for discovering new things. The main information tends to be at the bottom, work
+to be done on tidying the output of this but for now it is serviceable.
 
+Can be run with `python pyaudio_device_list.py` then choose the relevant device index and input it in `run_spectrogram.py`
+'s audio.open as the `input_device_index`:
+
+```python
+stream = audio.open(format=FORMAT,
+                    channels=CHANNELS,
+                    rate=RATE,
+                    input=True,
+                    input_device_index=<HERE>)```
 
 # TODO
 [ ] Finish README.md
@@ -36,5 +48,6 @@ There are various options but the main one is the flag `-i` which will invert th
 [ ] Figure out why there's strange low frequency artifacts
 [ ] Calculate FFT frequencies to display
 [ ] log colormap
+[ ] Tidy the device output of `pyaudio_device_list.py`
 
 
