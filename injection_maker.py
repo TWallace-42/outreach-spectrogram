@@ -34,8 +34,6 @@ def make_injection(file_name,invert = False,spectrogram_size = (150,150)):
 	if invert:
 		logo_arr = 1-logo_arr
 	savename = f"injections/{file_name.replace('.jpeg','.txt').replace('.png','.txt')}"
-
-		
 	#save
 	np.savetxt(savename,logo_arr)
 	print(f"injection saved in {savename}")

@@ -48,7 +48,7 @@ global keep_going
 keep_going = True
 
 
-spectrogram_size = (300,450) #f_steps, time steps
+spectrogram_size = (300,150) #f_steps, time steps
 spec_array = np.zeros(spectrogram_size)
 
 f = 3
@@ -186,7 +186,7 @@ while keep_going:
 		
 		#append the new reading to the spectrum_array
 		spec_array = np.concatenate([spec_array,dfft_data[0]+
-		injection_strength*np.max(dfft_data[0])*inject_data[:,0][:,None]],axis = 1)
+		injection_strength*inject_data[:,0][:,None]],axis = 1)
 		
 		#check if injection is still ongoing
 		if injection and inject_data.shape[1]>=2:
